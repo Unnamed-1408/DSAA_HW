@@ -1,8 +1,15 @@
 #include <iostream>
-#include <algorithm>
+
 
 using namespace std;
 void in(long long list[] , long long output[] , int num , int m);
+
+void Qsort(long long list[],long long num);
+void Merge(long long lista[] , long long listb[] , long long left ,long long Center ,long long right);
+void Mergesort(long long list[]  ,long long temp[], long long left ,long long right);
+long long* Start(long long list[],long long num);
+
+
 
 int main()
 {
@@ -37,7 +44,8 @@ void in(long long list[] , long long output[] , int num , int m){
         ptr--;
     }
 
-    sort(output+1,output+num);
+//    sort(output+1,output+num);
+    Qsort(output , num-1);
 
     long long total = 0;
     int numptr = 0;
@@ -49,3 +57,67 @@ void in(long long list[] , long long output[] , int num , int m){
     total += output[0];
     cout << total << endl;
 }
+
+void Qsort(long long list[], long long num){
+    Start(list , num);
+}
+
+long long* Start(long long list[],long long num){
+    long long temp[num];
+    Mergesort(list,temp,1,num);
+    return list;
+}
+
+void Mergesort(long long list[] , long long temp[],long long left ,long long right){
+
+     long long Center = (left+right)/2;
+
+     if(left < right){
+
+        Mergesort(list ,temp, left ,Center);
+        Mergesort(list ,temp, Center+1 ,right);
+        Merge(list , temp ,left ,Center ,right);
+
+     }
+
+}
+
+void Merge(long long list[] , long long temp[] , long long left ,long long Center ,long long right){
+    long long Aptr = left;
+    long long Bptr = Center+1;
+    long long Cptr = left;
+    while(Cptr != right+1){
+        if(Aptr != Center+1 && Bptr != right +1){
+            if(list[Aptr] < list[Bptr]){
+                temp[Cptr] = list[Aptr];
+                Cptr ++;
+                Aptr ++;
+            }
+            else{
+                temp[Cptr] = list[Bptr];
+                Cptr ++;
+                Bptr ++;
+            }
+       }
+
+        else if(Aptr == Center +1){
+            temp[Cptr] = list[Bptr];
+            Cptr ++;
+            Bptr ++;
+        }
+        else if(Bptr == right+1){
+            temp[Cptr] = list[Aptr];
+            Cptr ++;
+            Aptr ++;
+        }
+    }
+        int tempnum = left;
+        while(tempnum != right+1){
+            list[tempnum] = temp[tempnum];
+//            cout<<list[tempnum]<<endl;
+            tempnum++;
+        }
+}
+
+
+
